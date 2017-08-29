@@ -18,24 +18,33 @@ func ReadAndParse(infile string) map[string]string {
 		panic(err)
 	}
 	defer f.Close()
-
 	buf := bufio.NewReader(f)
 	m := make(map[string]string)
 	for {
+		var s_new []string
 		line, err := buf.ReadString('\n')
 		if err == io.EOF {
 			break
 		}
+		line = strings.Replace(line, "\t\t\t\t\t\t", "\t-\t-\t-\t-\t-\t-", 1)
 		if strings.HasPrefix(line, "#") {
 			continue
 		}
-		line = strings.TrimSpace(line)
-		_, ok := m[line]
+		s := strings.Split(line, "\t")
+		id := s[0]
+		for _, v := range s {
+			if v == "" {
+				v = "-"
+			}
+			s_new = append(s_new, v)
+		}
+		line = strings.Join(s_new, "\t")
+		//	line = strings.TrimSpace(line)
+		_, ok := m[id]
 		if ok {
-			fmt.Printf("\n%s is repeated in %s\n\n", line, infile)
 			totcount++
 		} else {
-			m[line] = "1"
+			m[id] = line
 		}
 	}
 
@@ -74,15 +83,12 @@ func main() {
 	for k := range scanid {
 		_, ok := listid[k]
 		count1 = count1 + 1
-		if ok {
-			file3.WriteString(k + "\n")
-		} else {
-			writestring := k + "\tnot in list...\n"
+		if !ok {
+			writestring := k
 			file1.WriteString(writestring)
 		}
 	}
 	file1.Close()
-	file3.Close()
 
 	// find scaned samples not in list
 
@@ -92,13 +98,15 @@ func main() {
 		_, ok := scanid[k]
 		if ok {
 			count2 = count2 + 1
+			file3.WriteString(listid[k])
 		} else {
 			count3 = count3 + 1
-			writestring := k + "\tnot in scan...\n"
+			writestring := listid[k]
 			file2.WriteString(writestring)
 		}
 	}
 	file2.Close()
+	file3.Close()
 	fmt.Printf("scaned in list: %d\n", count2)
 	fmt.Printf("total in scaned: %d\n", count1)
 	fmt.Printf("total in list: %d\n", count2+count3)

@@ -6,7 +6,7 @@ import (
 	"os"
 	"strings"
 
-	"github.com/DavisChen99/gotest/app"
+	"github.com/DavisChen99/public/gotest/app"
 )
 
 const scriptdir string = "/home/data/Scripts/kid17"
