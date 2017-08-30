@@ -43,6 +43,7 @@ func ReadAndParse(infile string) map[string]string {
 		_, ok := m[id]
 		if ok {
 			totcount++
+			fmt.Printf("\n%s is repeated in %s\n", id, infile)
 		} else {
 			m[id] = line
 		}
@@ -78,6 +79,10 @@ func main() {
 	if error != nil {
 		fmt.Println(error)
 	}
+	file4, error := os.Create("./UniqueInList.txt")
+	if error != nil {
+		fmt.Println(error)
+	}
 
 	count1 := 0
 	for k := range scanid {
@@ -94,8 +99,9 @@ func main() {
 
 	count2 := 0
 	count3 := 0
-	for k := range listid {
+	for k, val := range listid {
 		_, ok := scanid[k]
+		file4.WriteString(val)
 		if ok {
 			count2 = count2 + 1
 			file3.WriteString(listid[k])
@@ -107,6 +113,7 @@ func main() {
 	}
 	file2.Close()
 	file3.Close()
+	file4.Close()
 	fmt.Printf("scaned in list: %d\n", count2)
 	fmt.Printf("total in scaned: %d\n", count1)
 	fmt.Printf("total in list: %d\n", count2+count3)
