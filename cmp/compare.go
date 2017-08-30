@@ -8,11 +8,9 @@ import (
 	"strings"
 )
 
-var totcount int
-
 // ReadAndParse reads the file and parse each line, returns the map
 func ReadAndParse(infile string) map[string]string {
-	totcount = 0
+	var totcount int = 0
 	f, err := os.Open(infile)
 	if err != nil {
 		panic(err)
@@ -20,6 +18,7 @@ func ReadAndParse(infile string) map[string]string {
 	defer f.Close()
 	buf := bufio.NewReader(f)
 	m := make(map[string]string)
+	var repeatlist []string
 	for {
 		var s_new []string
 		line, err := buf.ReadString('\n')
@@ -43,12 +42,13 @@ func ReadAndParse(infile string) map[string]string {
 		_, ok := m[id]
 		if ok {
 			totcount++
-			fmt.Printf("\n%s is repeated in %s\n", id, infile)
+			repeatlist = append(repeatlist, id)
+			//	fmt.Printf("\n%s is repeated in %s\n", id, infile)
 		} else {
 			m[id] = line
 		}
 	}
-
+	fmt.Printf("repeated in %s: #%d\n%s\n", infile, totcount, repeatlist)
 	return m
 }
 
@@ -62,9 +62,7 @@ func main() {
 		listid map[string]string
 	)
 	scanid = ReadAndParse(infile1)
-	fmt.Printf("repeated in %s: %d\n", infile1, totcount)
 	listid = ReadAndParse(infile2)
-	fmt.Printf("repeated in %s: %d\n", infile2, totcount)
 
 	// find scaned samples in list
 	file1, error := os.Create("./InScanNotInList.txt")
