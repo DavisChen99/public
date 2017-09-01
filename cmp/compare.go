@@ -87,8 +87,10 @@ func main() {
 		_, ok := listid[k]
 		count1 = count1 + 1
 		if !ok {
-			writestring := k
+			writestring := k + "\n"
 			file1.WriteString(writestring)
+			notinlist := k + "\t-\t-\t-\t-\t-\t-\n"
+			file4.WriteString(notinlist)
 		}
 	}
 	file1.Close()
