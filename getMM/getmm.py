@@ -50,6 +50,13 @@ def download_mm(folder='MM',url=myurl):
             
     os.chdir(folder)
     judge =[]
+    check = re.search(r'^(\S+/\d+/\d+)_\d+.html$',url)
+    if check:
+        url = check.group(1) + '.html'
+        print (url)
+    else:
+        pass
+
     while True:
         nextid = get_page(url)
         # get raw url
