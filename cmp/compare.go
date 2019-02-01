@@ -25,7 +25,7 @@ func ReadAndParse(infile string) map[string]string {
 		if err == io.EOF {
 			break
 		}
-		line = strings.Replace(line, "\t\t\t\t\t\t", "\t-\t-\t-\t-\t-\t-", 1)
+		line = strings.Replace(line, "\t\t\t\t\t\t", "\t-\t-\t-\t-\t-\t", 1)
 		if strings.HasPrefix(line, "#") {
 			continue
 		}
